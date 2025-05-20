@@ -202,6 +202,12 @@ function App() {
     setTipPlaying(false);
   }
 
+  // --- Touch drag state for mobile drag-and-drop ---
+  const [touchDrag, setTouchDrag] = useState<{
+    letter: string | null;
+    origin: number | null;
+  }>({ letter: null, origin: null });
+
   return (
     <div className="game-container">
       <h1>Yasmine Spel: Maak het woord!</h1>
@@ -286,6 +292,31 @@ function App() {
             }}
             onClick={() => speakPhoneme(l)}
             onDragEnd={() => setDragged(null)}
+            // Touch events for tablets/mobiel
+            onTouchStart={() => {
+              setTouchDrag({ letter: l, origin: i });
+              speakPhoneme(l);
+            }}
+            onTouchMove={(e) => {
+              if (touchDrag.letter) {
+                const touch = e.touches[0];
+                const target = document.elementFromPoint(
+                  touch.clientX,
+                  touch.clientY
+                );
+                if (target && target.classList.contains("slot")) {
+                  // Simuleer drop op slot
+                  const idx = Number(target.getAttribute("data-slot-idx"));
+                  if (!isNaN(idx)) {
+                    setDragged(touchDrag.letter);
+                    handleDrop(idx);
+                    setTouchDrag({ letter: null, origin: null });
+                  }
+                }
+              }
+            }}
+            onTouchEnd={() => setTouchDrag({ letter: null, origin: null })}
+            style={{ touchAction: "none" }}
           >
             {l}
           </div>

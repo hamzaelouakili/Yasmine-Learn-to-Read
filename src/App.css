@@ -375,53 +375,198 @@ h1 {
     transform: scale(0.7);
   }
 }
+/* Verbeter mobiele layout en maak alles groter en makkelijker te bedienen */
+.game-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1rem;
+  background: #fffbe8;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 16px #0001;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.score {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.letters-row,
+.slots-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.2rem 0 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.draggable-letter {
+  background: #ffe066;
+  border: 2px solid #f9c846;
+  border-radius: 1rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #3b2f00;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.2rem;
+  box-shadow: 0 2px 8px #0002;
+  touch-action: none;
+  user-select: none;
+  transition: background 0.2s, border 0.2s;
+}
+
+.draggable-letter:active {
+  background: #ffd23f;
+  border-color: #f7b801;
+}
+
+.slot {
+  background: #e0e7ff;
+  border: 2px solid #a5b4fc;
+  border-radius: 1rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #37306b;
+  margin: 0.2rem;
+  box-shadow: 0 2px 8px #0001;
+  transition: background 0.2s, border 0.2s;
+}
+
+.slot.correct {
+  background: #d1fae5;
+  border-color: #10b981;
+}
+.slot.wrong {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+.tip-btn,
+.sound-btn {
+  font-size: 1.2rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 1.2rem;
+  border: none;
+  margin: 0.2rem;
+  background: #a5b4fc;
+  color: #37306b;
+  font-weight: bold;
+  box-shadow: 0 2px 8px #0001;
+  transition: background 0.2s;
+}
+
+.tip-btn:active,
+.sound-btn:active {
+  background: #818cf8;
+}
+
+.tip-spelling-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.tip-spelling-block {
+  background: #fffbe8;
+  border: 2px dashed #f9c846;
+  border-radius: 1rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3b2f00;
+  padding: 0.5rem 1rem;
+  margin: 0.1rem;
+  min-width: 2.2rem;
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tip-highlight {
+  background: #ffe066 !important;
+  border-color: #f7b801 !important;
+}
+
+.congrats-anim {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.congrats-img {
+  width: 120px;
+  height: auto;
+  animation: pop 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Mobiel: alles groter en meer ruimte */
 @media (max-width: 600px) {
-  div.game-container {
-    padding: 1rem;
-    max-width: 98vw;
+  .game-container {
+    padding: 0.2rem;
+    min-height: 100dvh;
   }
-  .picture {
-    width: 120px;
-    height: 120px;
-  }
-  .choice-btn {
-    font-size: 1.3rem;
-    padding: 0.7rem 1.2rem;
-  }
-  .sound-btn,
-  .tip-btn {
-    font-size: 1.3rem;
-    width: 2.7rem;
-    height: 2.7rem;
-  }
-  .slot,
-  .draggable-letter {
-    width: 2.7rem;
-    height: 2.7rem;
-    font-size: 1.5rem;
-    border-radius: 0.7rem;
-  }
-  .slots-row,
-  .letters-row {
-    gap: 0.7rem;
-  }
-  h1 {
-    font-size: 1.3rem;
-  }
-  .tip-spelling {
-    font-size: 1.1rem;
-  }
-  .congrats-img {
-    width: 160px;
-    border-radius: 1.2rem;
-    border-width: 3px;
-  }
-  .tip-spelling-block {
-    font-size: 1.2rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 0.6rem;
-  }
-  .tip-spelling-row {
+  .letters-row,
+  .slots-row {
     gap: 0.5rem;
   }
+  .draggable-letter,
+  .slot {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 2.5rem;
+    border-radius: 1.2rem;
+  }
+  .tip-spelling-block {
+    font-size: 2.2rem;
+    padding: 0.5rem 0.7rem;
+  }
+  .congrats-img {
+    width: 90px;
+  }
+  .tip-btn,
+  .sound-btn {
+    font-size: 1.1rem;
+    padding: 0.6rem 1rem;
+    border-radius: 1rem;
+  }
+}
+
+body {
+  background: #f3f4f6;
+  margin: 0;
+  font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
 }
