@@ -208,11 +208,7 @@ function App() {
       <p className="score">Score: {score}</p>
       {showCongrats && (
         <div className="congrats-anim">
-          <img
-            src={yasmineHappy}
-            alt="Goed zo!"
-            className="congrats-img"
-          />
+          <img src={yasmineHappy} alt="Goed zo!" className="congrats-img" />
         </div>
       )}
       <div className="sound-row">
