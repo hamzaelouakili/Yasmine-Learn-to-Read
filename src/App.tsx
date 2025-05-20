@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import yasmineHappy from "./assets/yasmine_happy.png";
 
 const gameData = [
   { word: "vis", sound: "v-i-s" },
@@ -214,7 +215,7 @@ function App() {
       {showCongrats && (
         <div className="congrats-anim">
           <img
-            src="src\assets\yasmine_happy.png"
+            src={yasmineHappy}
             alt="Goed zo!"
             className="congrats-img"
           />
