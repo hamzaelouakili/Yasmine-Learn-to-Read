@@ -208,13 +208,13 @@ h1 {
 }
 .tip-spelling-block {
   font-size: 2.2rem;
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+  font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
   color: #1976d2;
   background: #fffbe7;
   border-radius: 1.2rem;
   padding: 0.5rem 1.2rem;
   border: 2px solid #ffd54f;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: background 0.2s, border 0.2s, color 0.2s;
 }
 .tip-spelling-block.tip-highlight {
@@ -311,33 +311,69 @@ h1 {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  animation: fadeInScale 1.2s cubic-bezier(.25,1.7,.5,1.2);
+  animation: fadeInScale 1.2s cubic-bezier(0.25, 1.7, 0.5, 1.2);
 }
 .congrats-img {
   width: 320px;
   max-width: 80vw;
   height: auto;
   border-radius: 2.5rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   border: 6px solid #a8ff78;
-  animation: popscaleimg 1.2s cubic-bezier(.25,1.7,.5,1.2);
+  animation: popscaleimg 1.2s cubic-bezier(0.25, 1.7, 0.5, 1.2);
   background: #fff;
 }
 @keyframes fadeInScale {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-  20% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
-  40% { opacity: 1; transform: translate(-50%, -50%) scale(0.95); }
-  60% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-  80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
 }
 @keyframes popscaleimg {
-  0% { opacity: 0; transform: scale(0.7); }
-  20% { opacity: 1; transform: scale(1.15); }
-  40% { opacity: 1; transform: scale(0.95); }
-  60% { opacity: 1; transform: scale(1.05); }
-  80% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.7); }
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
 }
 @media (max-width: 600px) {
   div.game-container {

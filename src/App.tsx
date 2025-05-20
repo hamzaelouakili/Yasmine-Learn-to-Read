@@ -80,8 +80,16 @@ function App() {
   function pickDutchVoice(voices: SpeechSynthesisVoice[]) {
     // Kies eerst een Hollandse stem (nl-NL), bij voorkeur een vrouwenstem
     return (
-      voices.find((v) => v.lang.toLowerCase() === "nl-nl" && v.name.toLowerCase().includes("vrouw")) ||
-      voices.find((v) => v.lang.toLowerCase() === "nl-nl" && v.name.toLowerCase().includes("female")) ||
+      voices.find(
+        (v) =>
+          v.lang.toLowerCase() === "nl-nl" &&
+          v.name.toLowerCase().includes("vrouw")
+      ) ||
+      voices.find(
+        (v) =>
+          v.lang.toLowerCase() === "nl-nl" &&
+          v.name.toLowerCase().includes("female")
+      ) ||
       voices.find((v) => v.lang.toLowerCase() === "nl-nl") ||
       voices.find((v) => v.lang.toLowerCase().startsWith("nl")) ||
       null
@@ -194,7 +202,10 @@ function App() {
   }
 
   // Touch drag state
-  const [touchDrag, setTouchDrag] = useState<{ letter: string | null; origin: number | null }>({ letter: null, origin: null });
+  const [touchDrag, setTouchDrag] = useState<{
+    letter: string | null;
+    origin: number | null;
+  }>({ letter: null, origin: null });
 
   return (
     <div className="game-container">
@@ -292,7 +303,7 @@ function App() {
             onTouchEnd={() => {
               setTouchDrag({ letter: null, origin: null });
             }}
-            style={{ touchAction: 'none' }}
+            style={{ touchAction: "none" }}
           >
             {l}
           </div>
@@ -302,21 +313,26 @@ function App() {
         {slots.map((letter, idx) => (
           <div
             key={idx}
-            className={`slot ${feedback[idx]}${tipHighlight === idx ? " tip-highlight" : ""}`}
-            onDragOver={e => e.preventDefault()}
+            className={`slot ${feedback[idx]}${
+              tipHighlight === idx ? " tip-highlight" : ""
+            }`}
+            onDragOver={(e) => e.preventDefault()}
             onDrop={() => handleDrop(idx)}
             // Touch support: drop letter if finger released over slot
-            onTouchMove={e => {
+            onTouchMove={(e) => {
               if (touchDrag.letter) {
                 const touch = e.touches[0];
-                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                const target = document.elementFromPoint(
+                  touch.clientX,
+                  touch.clientY
+                );
                 if (target === e.currentTarget) {
                   handleDrop(idx);
                   setTouchDrag({ letter: null, origin: null });
                 }
               }
             }}
-            style={{ touchAction: 'none' }}
+            style={{ touchAction: "none" }}
           >
             {letter}
           </div>
