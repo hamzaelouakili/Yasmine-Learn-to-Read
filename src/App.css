@@ -379,103 +379,142 @@ h1 {
 .game-container {
   max-width: 480px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1.2rem 0.5rem 2.5rem 0.5rem;
   background: #fffbe8;
-  border-radius: 1.5rem;
-  box-shadow: 0 2px 16px #0001;
+  border-radius: 2rem;
+  box-shadow: 0 4px 24px #0002;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 4px solid #ffd23f;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 0.5rem;
   text-align: center;
+  color: #ff7b54;
+  letter-spacing: 1px;
+  text-shadow: 1px 2px 0 #fffbe8, 0 2px 8px #ffd23f;
 }
 
 .score {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
+  color: #3b2f00;
+  background: #ffe066;
+  border-radius: 1rem;
+  padding: 0.2rem 1.2rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px #ffd23f44;
 }
 
-.letters-row,
-.slots-row {
+.letters-row, .slots-row {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.1rem;
   margin: 1.2rem 0 0.5rem 0;
   flex-wrap: wrap;
 }
 
 .draggable-letter {
-  background: #ffe066;
-  border: 2px solid #f9c846;
-  border-radius: 1rem;
-  font-size: 2.2rem;
+  background: linear-gradient(135deg, #ffe066 60%, #ffd23f 100%);
+  border: 3px solid #f9c846;
+  border-radius: 1.2rem;
+  font-size: 2.3rem;
   font-weight: bold;
   color: #3b2f00;
-  width: 3.2rem;
-  height: 3.2rem;
+  width: 3.3rem;
+  height: 3.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0.2rem;
-  box-shadow: 0 2px 8px #0002;
+  box-shadow: 0 2px 8px #ffd23f44;
   touch-action: none;
   user-select: none;
-  transition: background 0.2s, border 0.2s;
+  transition: background 0.2s, border 0.2s, transform 0.2s;
+  cursor: pointer;
+  outline: 3px solid #fffbe8;
 }
 
 .draggable-letter:active {
   background: #ffd23f;
   border-color: #f7b801;
+  transform: scale(1.12) rotate(-4deg);
 }
 
 .slot {
-  background: #e0e7ff;
-  border: 2px solid #a5b4fc;
-  border-radius: 1rem;
-  width: 3.2rem;
-  height: 3.2rem;
+  background: linear-gradient(135deg, #e0e7ff 60%, #a5b4fc 100%);
+  border: 3px solid #a5b4fc;
+  border-radius: 1.2rem;
+  width: 3.3rem;
+  height: 3.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   font-weight: bold;
   color: #37306b;
   margin: 0.2rem;
-  box-shadow: 0 2px 8px #0001;
-  transition: background 0.2s, border 0.2s;
+  box-shadow: 0 2px 8px #a5b4fc44;
+  transition: background 0.2s, border 0.2s, transform 0.2s;
+  outline: 3px solid #fffbe8;
+}
+
+.slot-active {
+  box-shadow: 0 0 0 6px #ffd23f, 0 2px 8px #ffd23f44;
+  border-color: #f7b801;
+  background: #fffbe8;
+  animation: slotPulse 0.7s infinite alternate;
+}
+
+@keyframes slotPulse {
+  0% { box-shadow: 0 0 0 6px #ffd23f, 0 2px 8px #ffd23f44; }
+  100% { box-shadow: 0 0 0 12px #ffe066, 0 2px 8px #ffd23f44; }
 }
 
 .slot.correct {
   background: #d1fae5;
   border-color: #10b981;
+  animation: slotPop 0.4s cubic-bezier(.68,-0.55,.27,1.55);
 }
+
+@keyframes slotPop {
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
 .slot.wrong {
   background: #fee2e2;
   border-color: #ef4444;
+  animation: slotShake 0.3s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-.tip-btn,
-.sound-btn {
+@keyframes slotShake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-8px); }
+  40%, 60% { transform: translateX(8px); }
+}
+
+.tip-btn, .sound-btn {
   font-size: 1.2rem;
   padding: 0.7rem 1.2rem;
   border-radius: 1.2rem;
   border: none;
   margin: 0.2rem;
-  background: #a5b4fc;
+  background: linear-gradient(135deg, #a5b4fc 60%, #ffe066 100%);
   color: #37306b;
   font-weight: bold;
-  box-shadow: 0 2px 8px #0001;
-  transition: background 0.2s;
+  box-shadow: 0 2px 8px #ffd23f44;
+  transition: background 0.2s, transform 0.2s;
 }
 
-.tip-btn:active,
-.sound-btn:active {
-  background: #818cf8;
+.tip-btn:active, .sound-btn:active {
+  background: #ffd23f;
+  transform: scale(1.08);
 }
 
 .tip-spelling-row {
@@ -516,39 +555,28 @@ h1 {
 .congrats-img {
   width: 120px;
   height: auto;
-  animation: pop 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  animation: pop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
 }
 
 @keyframes pop {
-  0% {
-    transform: scale(0.7);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.15);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
 }
 
-/* Mobiel: alles groter en meer ruimte */
 @media (max-width: 600px) {
   .game-container {
     padding: 0.2rem;
     min-height: 100dvh;
   }
-  .letters-row,
-  .slots-row {
+  .letters-row, .slots-row {
     gap: 0.5rem;
   }
-  .draggable-letter,
-  .slot {
-    width: 3.5rem;
-    height: 3.5rem;
-    font-size: 2.5rem;
-    border-radius: 1.2rem;
+  .draggable-letter, .slot {
+    width: 3.7rem;
+    height: 3.7rem;
+    font-size: 2.6rem;
+    border-radius: 1.3rem;
   }
   .tip-spelling-block {
     font-size: 2.2rem;
@@ -557,8 +585,7 @@ h1 {
   .congrats-img {
     width: 90px;
   }
-  .tip-btn,
-  .sound-btn {
+  .tip-btn, .sound-btn {
     font-size: 1.1rem;
     padding: 0.6rem 1rem;
     border-radius: 1rem;
@@ -566,39 +593,7 @@ h1 {
 }
 
 body {
-  background: #f3f4f6;
+  background: linear-gradient(135deg, #f3f4f6 0%, #ffe066 100%);
   margin: 0;
-  font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
-}
-
-.slot-active {
-  box-shadow: 0 0 0 4px #ffd23f, 0 2px 8px #0002;
-  border-color: #f7b801;
-  background: #fffbe8;
-  animation: slotPulse 0.7s infinite alternate;
-}
-
-@keyframes slotPulse {
-  0% { box-shadow: 0 0 0 4px #ffd23f, 0 2px 8px #0002; }
-  100% { box-shadow: 0 0 0 8px #ffe066, 0 2px 8px #0002; }
-}
-
-.slot.correct {
-  animation: slotPop 0.4s cubic-bezier(.68,-0.55,.27,1.55);
-}
-
-@keyframes slotPop {
-  0% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-.slot.wrong {
-  animation: slotShake 0.3s cubic-bezier(.36,.07,.19,.97) both;
-}
-
-@keyframes slotShake {
-  10%, 90% { transform: translateX(-2px); }
-  20%, 80% { transform: translateX(4px); }
-  30%, 50%, 70% { transform: translateX(-8px); }
-  40%, 60% { transform: translateX(8px); }
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
 }
