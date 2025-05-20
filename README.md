@@ -15,12 +15,14 @@ This project is a simple, colorful React + TypeScript web game to help a 5-year-
 3. Open your browser and go to the local address shown in the terminal (usually http://localhost:5173).
 
 ## Game Features
+
 - Match Dutch words to colorful pictures
 - Practice letter sounds and simple words
 - Large, friendly buttons and text for young children
 - Designed for fun, learning, and engagement
 
 ## Customization
+
 You can add your own words and images by editing the game data in the source code. Placeholder images are used by default—replace them with your own for a personalized experience.
 
 ---
