@@ -570,3 +570,35 @@ body {
   margin: 0;
   font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
 }
+
+.slot-active {
+  box-shadow: 0 0 0 4px #ffd23f, 0 2px 8px #0002;
+  border-color: #f7b801;
+  background: #fffbe8;
+  animation: slotPulse 0.7s infinite alternate;
+}
+
+@keyframes slotPulse {
+  0% { box-shadow: 0 0 0 4px #ffd23f, 0 2px 8px #0002; }
+  100% { box-shadow: 0 0 0 8px #ffe066, 0 2px 8px #0002; }
+}
+
+.slot.correct {
+  animation: slotPop 0.4s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@keyframes slotPop {
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.slot.wrong {
+  animation: slotShake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes slotShake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-8px); }
+  40%, 60% { transform: translateX(8px); }
+}
