@@ -291,7 +291,10 @@ function App() {
 					<div
 						key={l + i}
 						className="draggable-letter"
-						onClick={() => handleLetterClick(l)}
+						onClick={() => {
+							speakPhoneme(l); // Spreek de letter uit bij klikken
+							handleLetterClick(l);
+						}}
 						style={{ touchAction: "none", cursor: "pointer" }}
 					>
 						{l}
