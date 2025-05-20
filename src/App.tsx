@@ -202,12 +202,6 @@ function App() {
     setTipPlaying(false);
   }
 
-  // Touch drag state
-  const [touchDrag, setTouchDrag] = useState<{
-    letter: string | null;
-    origin: number | null;
-  }>({ letter: null, origin: null });
-
   return (
     <div className="game-container">
       <h1>Yasmine Spel: Maak het woord!</h1>
@@ -296,46 +290,8 @@ function App() {
             }}
             onClick={() => speakPhoneme(l)}
             onDragEnd={() => setDragged(null)}
-            // Touch events for tablets
-            onTouchStart={() => {
-              setTouchDrag({ letter: l, origin: i });
-              speakPhoneme(l);
-            }}
-            onTouchEnd={() => {
-              setTouchDrag({ letter: null, origin: null });
-            }}
-            style={{ touchAction: "none" }}
           >
             {l}
-          </div>
-        ))}
-      </div>
-      <div className="slots-row">
-        {slots.map((letter, idx) => (
-          <div
-            key={idx}
-            className={`slot ${feedback[idx]}${
-              tipHighlight === idx ? " tip-highlight" : ""
-            }`}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={() => handleDrop(idx)}
-            // Touch support: drop letter if finger released over slot
-            onTouchMove={(e) => {
-              if (touchDrag.letter) {
-                const touch = e.touches[0];
-                const target = document.elementFromPoint(
-                  touch.clientX,
-                  touch.clientY
-                );
-                if (target === e.currentTarget) {
-                  handleDrop(idx);
-                  setTouchDrag({ letter: null, origin: null });
-                }
-              }
-            }}
-            style={{ touchAction: "none" }}
-          >
-            {letter}
           </div>
         ))}
       </div>
