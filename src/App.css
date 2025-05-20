@@ -200,6 +200,31 @@ h1 {
   font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
 }
 
+.tip-spelling-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.tip-spelling-block {
+  font-size: 2.2rem;
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+  color: #1976d2;
+  background: #fffbe7;
+  border-radius: 1.2rem;
+  padding: 0.5rem 1.2rem;
+  border: 2px solid #ffd54f;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+.tip-spelling-block.tip-highlight {
+  background: #fff176;
+  border: 2px solid #ff9800;
+  color: #333;
+  box-shadow: 0 0 0 6px #ffe082;
+  z-index: 2;
+}
+
 .slots-row {
   display: flex;
   gap: 1.2rem;
@@ -232,6 +257,14 @@ h1 {
   background: #ffbdbd;
   border: 3px solid #ff5858;
   color: #b71c1c;
+}
+.slot.tip-highlight {
+  background: #fff176 !important;
+  border: 3px solid #ff9800 !important;
+  color: #333 !important;
+  box-shadow: 0 0 0 6px #ffe082;
+  z-index: 2;
+  transition: background 0.2s, border 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
 .letters-row {
@@ -269,49 +302,43 @@ h1 {
 
 .congrats-anim {
   position: fixed;
-  top: 35%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
-  background: linear-gradient(90deg, #a8ff78 0%, #78ffd6 100%);
-  color: #1b5e20;
-  font-size: 3.2rem;
-  font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
-  font-weight: bold;
-  padding: 2.2rem 4rem;
-  border-radius: 2.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   z-index: 1000;
-  text-align: center;
-  animation: popscale 1.2s cubic-bezier(0.25, 1.7, 0.5, 1.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
+  animation: fadeInScale 1.2s cubic-bezier(.25,1.7,.5,1.2);
 }
-@keyframes popscale {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.7);
-  }
-  20% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.15);
-  }
-  40% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0.95);
-  }
-  60% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.05);
-  }
-  80% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.7);
-  }
+.congrats-img {
+  width: 320px;
+  max-width: 80vw;
+  height: auto;
+  border-radius: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  border: 6px solid #a8ff78;
+  animation: popscaleimg 1.2s cubic-bezier(.25,1.7,.5,1.2);
+  background: #fff;
 }
-
+@keyframes fadeInScale {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  20% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  40% { opacity: 1; transform: translate(-50%, -50%) scale(0.95); }
+  60% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+}
+@keyframes popscaleimg {
+  0% { opacity: 0; transform: scale(0.7); }
+  20% { opacity: 1; transform: scale(1.15); }
+  40% { opacity: 1; transform: scale(0.95); }
+  60% { opacity: 1; transform: scale(1.05); }
+  80% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.7); }
+}
 @media (max-width: 600px) {
   div.game-container {
     padding: 1rem;
@@ -347,5 +374,18 @@ h1 {
   }
   .tip-spelling {
     font-size: 1.1rem;
+  }
+  .congrats-img {
+    width: 160px;
+    border-radius: 1.2rem;
+    border-width: 3px;
+  }
+  .tip-spelling-block {
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.6rem;
+  }
+  .tip-spelling-row {
+    gap: 0.5rem;
   }
 }

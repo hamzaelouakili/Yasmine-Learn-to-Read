@@ -44,6 +44,13 @@ function getPhonemeBlocks(word: string, sound: string) {
   return word.split("");
 }
 
+// Helper: geef een array met alle klankblokken, ook dubbele, bv. 'pop' => ['p','o','p']
+function getPhonemeBlocksAll(word: string, sound: string) {
+  const blocks = sound.split("-");
+  if (blocks.join("") === word) return blocks;
+  return word.split("");
+}
+
 function App() {
   const [score, setScore] = useState(0);
   const [showTip, setShowTip] = useState(false);
@@ -61,25 +68,57 @@ function App() {
     Array(phonemes.length).fill("none")
   );
   const [showCongrats, setShowCongrats] = useState(false);
-  // Alleen de klankblokken van het woord, in random volgorde
-  function getLetterOptions(word: string, sound: string) {
-    const blocks = getPhonemeBlocks(word, sound);
-    let shuffled: string[];
-    do {
-      shuffled = shuffle(blocks);
-    } while (shuffled.join("") === blocks.join(""));
-    return shuffled;
+  const [tipHighlight, setTipHighlight] = useState(-1);
+  // Toon alle klankblokken (ook dubbele) als losse drag letters
+  function getLetterOptionsAll(word: string, sound: string) {
+    return shuffle(getPhonemeBlocksAll(word, sound));
   }
   const [letters, setLetters] = useState(() =>
-    getLetterOptions(current.word, current.sound)
+    getLetterOptionsAll(current.word, current.sound)
   );
+
+  function pickDutchVoice(voices: SpeechSynthesisVoice[]) {
+    // Kies eerst een Hollandse stem (nl-NL), bij voorkeur een vrouwenstem
+    return (
+      voices.find((v) => v.lang.toLowerCase() === "nl-nl" && v.name.toLowerCase().includes("vrouw")) ||
+      voices.find((v) => v.lang.toLowerCase() === "nl-nl" && v.name.toLowerCase().includes("female")) ||
+      voices.find((v) => v.lang.toLowerCase() === "nl-nl") ||
+      voices.find((v) => v.lang.toLowerCase().startsWith("nl")) ||
+      null
+    );
+  }
+
+  function speakPhoneme(phoneme: string) {
+    return new Promise((resolve) => {
+      window.speechSynthesis.cancel(); // Direct stoppen voor snelle start
+      const utter = new window.SpeechSynthesisUtterance(phoneme);
+      const voices = window.speechSynthesis.getVoices();
+      utter.voice = pickDutchVoice(voices);
+      utter.lang = utter.voice?.lang || "nl-NL";
+      utter.rate = 0.8;
+      utter.onend = resolve;
+      window.speechSynthesis.speak(utter);
+    });
+  }
 
   function speakWord(word: string) {
     if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel(); // Direct stoppen voor snelle start
       const utter = new window.SpeechSynthesisUtterance(word);
-      utter.lang = "nl-NL";
+      const voices = window.speechSynthesis.getVoices();
+      utter.voice = pickDutchVoice(voices);
+      utter.lang = utter.voice?.lang || "nl-NL";
+      utter.rate = 0.8;
       window.speechSynthesis.speak(utter);
     }
+  }
+
+  function playCelebrationSound() {
+    const audio = new Audio(
+      "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae5b2.mp3"
+    );
+    audio.volume = 0.5;
+    audio.play();
   }
 
   function handleDrop(idx: number) {
@@ -87,20 +126,33 @@ function App() {
     const correctPhoneme = phonemes[idx];
     const newSlots = [...slots];
     const newFeedback = [...feedback];
-    if (dragged === correctPhoneme && !slots.includes(dragged)) {
+    if (dragged === correctPhoneme && !slots[idx]) {
       newSlots[idx] = dragged;
       newFeedback[idx] = "correct";
       setSlots(newSlots);
       setFeedback(newFeedback);
-      setLetters(letters.filter((l) => l !== dragged));
+      // Verwijder alleen de eerste niet-gebruikte letter uit letters
+      const dragIdx = letters.findIndex((l) => l === dragged);
+      setLetters(letters.filter((_, i) => i !== dragIdx));
       // Check of woord af is
       if (newSlots.join("") === phonemes.join("")) {
-        setShowCongrats(true);
-        setTimeout(() => {
-          setScore((s) => s + 1);
-          setShowCongrats(false);
-          nextWord();
-        }, 1400);
+        playCelebrationSound();
+        // Eerst uitspraak + highlight, dan pas goed zo afbeelding
+        (async () => {
+          for (let i = 0; i < phonemes.length; i++) {
+            setTipHighlight(i);
+            await speakPhoneme(phonemes[i]);
+          }
+          setTipHighlight(-1);
+          // Repeat the whole word
+          await speakPhoneme(current.word);
+          setShowCongrats(true);
+          setTimeout(() => {
+            setScore((s) => s + 1);
+            setShowCongrats(false);
+            nextWord();
+          }, 900);
+        })();
       }
     } else {
       newFeedback[idx] = "wrong";
@@ -121,15 +173,42 @@ function App() {
     setPhonemes(nextPhonemes);
     setSlots(Array(nextPhonemes.length).fill(null));
     setFeedback(Array(nextPhonemes.length).fill("none"));
-    setLetters(getLetterOptions(next.word, next.sound));
+    setLetters(getLetterOptionsAll(next.word, next.sound));
     setShowTip(false);
   }
+
+  // Track if tip is currently playing
+  const [tipPlaying, setTipPlaying] = useState(false);
+
+  // Tip: highlight and pronounce each klankblok (phoneme) in order
+  async function handleTip() {
+    if (tipPlaying) return; // Prevent double play
+    setShowTip(true);
+    setTipPlaying(true);
+    for (let i = 0; i < phonemes.length; i++) {
+      setTipHighlight(i);
+      await speakPhoneme(phonemes[i]);
+    }
+    setTipHighlight(-1);
+    setTipPlaying(false);
+  }
+
+  // Touch drag state
+  const [touchDrag, setTouchDrag] = useState<{ letter: string | null; origin: number | null }>({ letter: null, origin: null });
 
   return (
     <div className="game-container">
       <h1>Yasmine Spel: Maak het woord!</h1>
       <p className="score">Score: {score}</p>
-      {showCongrats && <div className="congrats-anim">Goed zo! 🎉</div>}
+      {showCongrats && (
+        <div className="congrats-anim">
+          <img
+            src="src\assets\yasmine_happy.png"
+            alt="Goed zo!"
+            className="congrats-img"
+          />
+        </div>
+      )}
       <div className="sound-row">
         <button
           className="sound-btn"
@@ -138,16 +217,54 @@ function App() {
         >
           🔊
         </button>
-        <button className="tip-btn" onClick={() => setShowTip((t) => !t)}>
-          Tip
-        </button>
+        {!showTip && (
+          <button className="tip-btn" onClick={handleTip} disabled={tipPlaying}>
+            Tip
+          </button>
+        )}
+        {showTip && (
+          <>
+            <button
+              className="tip-btn"
+              onClick={handleTip}
+              disabled={tipPlaying}
+            >
+              Herhaal tip
+            </button>
+            <button
+              className="tip-btn"
+              onClick={() => {
+                setShowTip(false);
+                setTipHighlight(-1);
+              }}
+              disabled={tipPlaying}
+            >
+              Verberg tip
+            </button>
+          </>
+        )}
       </div>
-      {showTip && <div className="tip-spelling">{current.sound}</div>}
+      {showTip && (
+        <div className="tip-spelling-row">
+          {phonemes.map((ph, idx) => (
+            <span
+              key={idx}
+              className={`tip-spelling-block${
+                tipHighlight === idx ? " tip-highlight" : ""
+              }`}
+            >
+              {ph}
+            </span>
+          ))}
+        </div>
+      )}
       <div className="slots-row">
         {slots.map((letter, idx) => (
           <div
             key={idx}
-            className={`slot ${feedback[idx]}`}
+            className={`slot ${feedback[idx]}${
+              tipHighlight === idx ? " tip-highlight" : ""
+            }`}
             onDragOver={(e) => e.preventDefault()}
             onDrop={() => handleDrop(idx)}
           >
@@ -161,10 +278,47 @@ function App() {
             key={l + i}
             className="draggable-letter"
             draggable
-            onDragStart={() => setDragged(l)}
+            onDragStart={() => {
+              setDragged(l);
+              speakPhoneme(l);
+            }}
+            onClick={() => speakPhoneme(l)}
             onDragEnd={() => setDragged(null)}
+            // Touch events for tablets
+            onTouchStart={() => {
+              setTouchDrag({ letter: l, origin: i });
+              speakPhoneme(l);
+            }}
+            onTouchEnd={() => {
+              setTouchDrag({ letter: null, origin: null });
+            }}
+            style={{ touchAction: 'none' }}
           >
             {l}
+          </div>
+        ))}
+      </div>
+      <div className="slots-row">
+        {slots.map((letter, idx) => (
+          <div
+            key={idx}
+            className={`slot ${feedback[idx]}${tipHighlight === idx ? " tip-highlight" : ""}`}
+            onDragOver={e => e.preventDefault()}
+            onDrop={() => handleDrop(idx)}
+            // Touch support: drop letter if finger released over slot
+            onTouchMove={e => {
+              if (touchDrag.letter) {
+                const touch = e.touches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (target === e.currentTarget) {
+                  handleDrop(idx);
+                  setTouchDrag({ letter: null, origin: null });
+                }
+              }
+            }}
+            style={{ touchAction: 'none' }}
+          >
+            {letter}
           </div>
         ))}
       </div>
